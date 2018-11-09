@@ -5,9 +5,10 @@ class Deck
       [CardInfo::MARKET, 3],
       [CardInfo::TEST, 1]
     ]
+    @hands = []
+    @discards = []
     @deck = []
     build
-    #show
   end
 
   def build
@@ -32,8 +33,32 @@ class Deck
   end
 
   def drawCard
-    #syusei yotei
-    build if @deck.length == 0
-    @deck.pop
+    if @deck.length == 0
+      @deck_recipe = []
+      card_types = @discards.uniq
+      card_types.each do |card|
+        @deck_recipe << [card, @discards.count(card)]
+      end
+      build
+      @discards = []
+      #p "new deck!!!!!!!!!"
+      show
+    end
+
+    @hands << @deck.pop
+    @hands.last
+  end
+
+  def disCard
+    @discards.concat(@hands)
+    @hands = []
+  end
+
+  def draw
+    sprites = []
+    @hands.each_with_index do |card, i|
+      sprites << Card.new(100 + i * 150, 300, card)
+    end
+    Sprite.draw(sprites)
   end
 end
