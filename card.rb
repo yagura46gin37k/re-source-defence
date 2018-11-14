@@ -1,11 +1,13 @@
 module CardInfo
   #INFO = [name, text, main color, sub color, effect]
-  FARM = ["farm", "+1 food", C_GREEN, C_WHITE, Proc.new do
-    Kingdom.food += 1
+  FARM = ["farm", "+1 food", C_GREEN, C_WHITE, Proc.new do |kingdom|
+    kingdom.food += 1
+    p "food = #{kingdom.food}"
   end]
 
-  MARKET = ["market", "+1 gold", C_YELLOW, C_WHITE, Proc.new do
-    Kingdom.gold += 1
+  MARKET = ["market", "+1 gold", C_YELLOW, C_WHITE, Proc.new do |kingdom|
+    kingdom.gold += 1
+    p "gold = #{kingdom.gold}"
   end]
 
   TEST = ["test", "01234567890this is newline test", C_BLUE, [255, 200, 200, 200], Proc.new do
@@ -39,8 +41,8 @@ class Card < Sprite
     super(x, y, @card_image)
   end
 
-  def use
-    @effect.call
-    Kingdom.action -= 1
+  def use(kingdom)
+    @effect.call(kingdom)
+    kingdom.action -= 1
   end
 end
