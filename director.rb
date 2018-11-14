@@ -58,6 +58,11 @@ class Director
         @pnum %= PHASE.length
         @phase = PHASE[@pnum]
       end
+      if @mouse === @deck.hand_sprites and @mouse.push
+        @mouse.check(@deck.hand_sprites).each do |card|
+          card.use(@kingdom)
+        end
+      end
     when :boss
     end
   end

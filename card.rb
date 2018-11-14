@@ -44,5 +44,6 @@ class Card < Sprite
   def use(kingdom)
     @effect.call(kingdom)
     kingdom.action -= 1
+    self.vanish
   end
 end

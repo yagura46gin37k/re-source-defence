@@ -1,4 +1,6 @@
 class Deck
+  attr_reader :hand_sprites
+
   def initialize()
     @deck_recipe = [
       [CardInfo::FARM, 3],
@@ -6,6 +8,7 @@ class Deck
       [CardInfo::TEST, 1]
     ]
     @hands = []
+    @hand_sprites = []
     @discards = []
     @deck = []
     build
@@ -41,7 +44,6 @@ class Deck
       end
       build
       @discards = []
-      #p "new deck!!!!!!!!!"
       show
     end
 
@@ -52,13 +54,15 @@ class Deck
   def disCard
     @discards.concat(@hands)
     @hands = []
+    @hand_sprites = []
   end
 
   def draw
-    sprites = []
-    @hands.each_with_index do |card, i|
-      sprites << Card.new(100 + i * 150, 300, card)
+    if @hand_sprites.length == 0
+      @hands.each_with_index do |card, i|
+        @hand_sprites << Card.new(100 + i * 150, 300, card)
+      end
     end
-    Sprite.draw(sprites)
+    Sprite.draw(@hand_sprites)
   end
 end
