@@ -1,18 +1,33 @@
 module CardInfo
   #INFO = [name, text, main color, sub color, effect]
-  FARM = ["farm", "+1 food", C_GREEN, C_WHITE, Proc.new do |kingdom|
+  FARM = ["farm", "+1 food", C_GREEN, C_WHITE, Proc.new do |var|
+    kingdom = self.take(var, Kingdom)
     kingdom.food += 1
     p "food = #{kingdom.food}"
   end]
 
-  MARKET = ["market", "+1 gold", C_YELLOW, C_WHITE, Proc.new do |kingdom|
+  MARKET = ["market", "+1 gold", C_YELLOW, C_WHITE, Proc.new do |var|
+    kingdom = self.take(var, Kingdom)
     kingdom.gold += 1
     p "gold = #{kingdom.gold}"
   end]
 
-  TEST = ["test", "01234567890this is newline test", C_BLUE, [255, 200, 200, 200], Proc.new do
+  TEST = ["test", "01234567890this is newline test", C_BLUE, [255, 200, 200, 200], Proc.new do |var|
+    deck = self.take(var, Deck)
     p "card effect test!"
+    deck.show
   end]
+
+  def self.take(ary, klass)
+    object = nil
+    ary.each do |var|
+      if var.instance_of?(klass)
+        object = var
+        break
+      end
+    end
+    object
+  end
 end
 
 class Card < Sprite
@@ -22,6 +37,8 @@ class Card < Sprite
   TEXT_SIZE = 16
   @@name_font = Font.new(NAME_SIZE, "Consolas")
   @@text_font = Font.new(TEXT_SIZE, "Consolas")
+  @@deck = nil
+  @@kingdom = nil
 
   def initialize(x, y, name = CardInfo::TEST)
     @name = name[0]
@@ -41,9 +58,17 @@ class Card < Sprite
     super(x, y, @card_image)
   end
 
-  def use(kingdom)
-    @effect.call(kingdom)
-    kingdom.action -= 1
+  def use
+    @effect.call([@@kingdom, @@deck])
+    @@kingdom.action -= 1
     self.vanish
+  end
+
+  def self.kingdom=(val)
+    @@kingdom = val
+  end
+
+  def self.deck=(val)
+    @@deck = val
   end
 end

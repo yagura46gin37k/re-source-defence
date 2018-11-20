@@ -21,6 +21,9 @@ class Director
     @mouse = Mouse.new
     @kingdom = Kingdom.new
     @soldiers = []
+
+    Card.deck = @deck
+    Card.kingdom = @kingdom
   end
 
   def input
@@ -68,7 +71,7 @@ class Director
       end
       if @mouse === @deck.hand_sprites and @mouse.push
         @mouse.check(@deck.hand_sprites).each do |card|
-          card.use(@kingdom)
+          card.use
         end
       end
     when :boss
