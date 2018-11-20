@@ -20,12 +20,19 @@ class Director
     @is_drawed = false
     @mouse = Mouse.new
     @kingdom = Kingdom.new
+    @soldiers = []
   end
 
   def input
     @mouse.x = Input.mouse_pos_x
     @mouse.y = Input.mouse_pos_y
     @mouse.push = Input.mouse_push?(M_LBUTTON)
+  end
+
+  def battle
+    @soldiers.length.times do |i|
+      @soldiers[i].battle
+    end
   end
 
   def play
@@ -48,6 +55,7 @@ class Director
         @is_drawed = false
       when :main
       when :battle
+        battle
       when :end
         @kingdom.gold -= 100
       end
